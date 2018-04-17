@@ -1,0 +1,10 @@
+.idea
+/node_modules
+/public/components
+/public/data
+/.vagrant
+/passport
+/config/emailData.js
+/logs
+package-lock.json
+

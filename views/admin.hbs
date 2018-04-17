@@ -1,0 +1,160 @@
+
+<section>
+    <div id="login" class="login-wrapper d-flex align-items-center">
+        <div class="container container-destinos">
+            <div class="row d-flex justify-content-center row-contact">
+                <div class="col-12 admin-destinos">
+                    <div class="contact-message">
+                        <h3 class="text-white"><i class="mb-4 material-icons mi-center text-white">account_circle</i> DESTINOS</h3>
+                    </div>
+                    <div class="table-container mb-4">
+                        <table class="table table-fixed ">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Country</th>
+                                <th scope="col">City</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Activo</th>
+                                <th scope="col">Edit</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {{#if destinos}}
+                                {{#each destinos}}
+                                    <tr>
+                                        <td>{{id}}</></td>
+                                        <td>{{country}}</td>
+                                        <td>{{city}}</td>
+                                        <td>{{price}}</td>
+                                        <td>{{image}}</td>
+                                        <td>{{type}}</td>
+                                        <td>{{description}}</td>
+                                        <td class="text-center">
+                                            <input id="cbActive" class="cbActive active-destinos" type="checkbox" {{#if active}}checked{{/if}}>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="edit-td btn btn-outline-light" data-toggle="modal" data-target="#editModal{{id}}">
+                                                Edit
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <a class="edit-td btn btn-outline-light" href="/admin/delete/{{id}}"> <span aria-hidden="true">&times;</span> </a>
+                                        </td>
+                                    </tr>
+                                {{/each}}
+                            {{/if}}
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {{# each destinos}}
+                        <!-- Modal -->
+                        <div class="modal fade" id="editModal{{id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Edit destination: {{id}} - {{city}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form class="mt-2" method="post" action="/admin/edit">
+                                        <div class="modal-body">
+                                            <div class="d-none form-row">
+                                                <div class="d-flex align-items-center">
+                                                    <input value="{{id}}" name="id" type="text" class="w-25 m-1 form-control" id="login-name" placeholder="City">
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="d-flex align-items-center w-100">
+                                                    <input value="{{city}}" name="city" type="text" class="m-1 form-control" id="login-name" placeholder="City">
+                                                    <input value="{{country}}" name="country" type="text" class="m-1 form-control" id="login-name" placeholder="Country">
+                                                    <input value="{{price}}" name="price" type="text" class="m-1 form-control" id="login-name" placeholder="Price">
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="d-flex align-items-center w-100">
+                                                    <input value="{{image}}" name="image" type="text" class="m-1 form-control" id="login-name" placeholder="Image">
+                                                    <input value="{{type}}" name="type" type="text" class="m-1 form-control" id="login-name" placeholder="Type">
+                                                    <input value="{{description}}" name="description" type="text" class="m-1 form-control" id="login-name" placeholder="Description">
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-4 input-group">
+                                                    <select name="active" class="mt-1 mb-1 custom-select" id="inputGroupSelect04">
+                                                        <option {{#unless active}}selected="selected"{{/unless}} value="1">Hide</option>
+                                                        <option {{#if active}}selected="selected" {{/if}}value="2">Active</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {{/each}}
+
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                        Add new destination
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Add destination</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form class="mt-2" enctype="multipart/form-data" method="post" action="/admin/add">
+                                    <div class="modal-body">
+                                        <div class="form-row">
+                                            <div class="d-flex align-items-center w-100">
+                                                <input name="city" type="text" class="m-1 form-control" id="login-name" placeholder="City">
+                                                <input name="country" type="text" class="m-1 form-control" id="login-name" placeholder="Country">
+                                                <input name="price" type="text" class="m-1 form-control" id="login-name" placeholder="Price">
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="d-flex align-items-center w-100">
+                                                <input name="type" type="text" class="m-1 form-control" id="login-name" placeholder="Type">
+                                                <input name="description" type="text" class="m-1 form-control" id="login-name" placeholder="Description">
+                                                <select name="active" class="form-control m-1 custom-select" id="inputGroupSelect04">
+                                                    <option value="0">Hide</option>
+                                                    <option value="1">Active</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="d-flex align-items-center w-75">
+                                                <input name="image" type="file" class="m-1 form-control-file" id="login-name" placeholder="Image">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
