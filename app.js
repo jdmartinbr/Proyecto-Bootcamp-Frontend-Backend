@@ -10,9 +10,9 @@ var winston = require('./config/winston');
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin');
 var emailRouter = require('./routes/email');
+let paginate = require('express-paginate');
 
 var app = express();
-
 
 let env = process.env.NODE_ENV || 'desarrollo';
 let config = require('./config/config')[env];
@@ -26,15 +26,17 @@ switch (env){
         break;
 }
 
+app.use(paginate.middleware(2, 20))
+
 // Sessions
 
-app.use(flash());
 app.use(session({
     secret: 'secret',
     name: 'superSecret',
     resave: true,
     saveUninitialized: true
 }));
+app.use(flash());
 
 // HBS Engine
 
@@ -42,6 +44,7 @@ var hbs = require('hbs');
 hbs.registerPartials(`${__dirname}/views/partials`);
 var hbsUtils = require('hbs-utils')(hbs);
 hbsUtils.registerWatchedPartials(`${__dirname}/views/partials`);
+require('./helpers/hbs')(hbs);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

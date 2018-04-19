@@ -5,6 +5,8 @@
 /.vagrant
 /passport
 /config/emailData.js
+/config/sequelizeData.js
 /logs
+/apuntes
 package-lock.json
-
+ubuntu-xenial-16.04-cloudimg-console.log

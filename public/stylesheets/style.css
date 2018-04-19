@@ -99,13 +99,13 @@ iframe {
 
 /* Scroll */
 
-.nav-scroll, .nav-scroll a, .nav-scroll i {
+.nav-scroll-menu, .nav-scroll-menu a, .nav-scroll-menu i {
   background-color: white !important;
   color: #727272 !important;
 
 }
 
-.nav-scroll {
+.nav-scroll-menu {
   -webkit-box-shadow: 0px 0px 34px 10px rgba(0, 0, 0, 0.21);
   -moz-box-shadow: 0px 0px 34px 10px rgba(0, 0, 0, 0.21);
   box-shadow: 0px 0px 34px 10px rgba(0, 0, 0, 0.21);
@@ -732,9 +732,11 @@ footer ul {
 }
 
 .remember-password {
-  text-align: right;
-  padding-top: 2em;
+  text-align: left;
+  padding-bottom: 0.5em;
   cursor: pointer;
+  padding-left: 0;
+  margin-top: -0.5em;
 }
 
 .modal-body {
@@ -790,7 +792,6 @@ footer ul {
 
 .table-container {
   max-height: 50vh;
-  overflow-y: scroll;
 }
 
 .btn-secondary {
@@ -827,6 +828,54 @@ footer ul {
   margin-left: auto;
 }
 
+/* Cart */
+
+.container-cart {
+  padding: 0em 0em 4em 0em;
+}
+
+.cart-wrapper {
+  min-height: 100vh;
+  background-color: #e6e6e6;
+}
+
+.form-cart{
+  background-color: white;
+  padding: 1em;
+}
+
+#cart-total {
+  background-color: white;
+  border-left: 8px solid rgb(60, 165, 255);
+  padding: 1.5em;
+}
+
+#cart-item {
+  background-color: white;
+  padding: 1.5em;
+  margin-top: 1em;
+}
+
+.cart-item-image {
+  background-image: url("../images/paris.jpg");
+  height: auto;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.cart-item-description {
+  margin-left: 1em;
+  width: 50%;
+}
+.cart-item-description p{
+  line-height: 1.2;
+}
+
+.cart-description-small {
+  transform: rotate(90deg);
+  font-size: 10px;
+}
 
 /* Media Querys*/
 

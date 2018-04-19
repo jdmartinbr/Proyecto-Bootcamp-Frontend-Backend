@@ -1,8 +1,9 @@
 const SEQUELIZE = require('sequelize');
+const sequelizeData = require('../config/sequelizeData');
 
-const sequelize = new SEQUELIZE ('travel_agency', 'root', 'mysql', {
-    host: 'localhost',
-    dialect: 'mysql',
+const sequelize = new SEQUELIZE (sequelizeData.database, sequelizeData.user, sequelizeData.password, {
+    host: sequelizeData.host,
+    dialect: sequelizeData.dialect,
     operatorAliases: false,
     pool: {
         max: 5,

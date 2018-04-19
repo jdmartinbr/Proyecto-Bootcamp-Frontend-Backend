@@ -3,6 +3,8 @@ let router = express.Router();
 let usersController = require('../controllers/userController');
 let homeController = require('../controllers/homeController');
 let checkAccessUser = require('../middelwares/sessionSegurity');
+let User = require('../models/usersSeq');
+
 
 router.get('/a', function (req, res, next) {
     let a = req.session;
@@ -49,15 +51,19 @@ router.post('/newpassword', function (req, res, next) {
     usersController.setNewPassword(req, res, next)
 });
 
-// router.get('/newpassword/:hash', function (req, res, next) {
-//     User.findOne({ where: {hash: req.params.hash} }).then(userData => {
-//         if (!userData) return res.redirect('/');
-//         res.render('newPassword', {
-//             title: 'New Password',
-//             layout: 'template',
-//             hash: req.params.hash
-//         })
-//     });
-// });
+router.get('/cart', function (req, res, next) {
+    homeController.cart(req, res, next);
+});
+
+router.get('/findAll', function (req, res, next) {
+    User.findAll({where: {$or: [{email:{$eq: "jd.martinbr@gmail.com"}}, {usuario:{$eq: 'admin'}}]}
+        }).then(users=> res.send(users));
+    // User.findOrCreate({where: {$or: [{email:{$eq: "jd.martinbr@gmail.com"}}, {usuario:{$eq: 'admin'}}]}})
+    //     .spread(function (user, created) {
+    //     console.log(user.get({plain: true}));
+    //     res.send(user);
+    //
+    // });
+});
 
 module.exports = router;

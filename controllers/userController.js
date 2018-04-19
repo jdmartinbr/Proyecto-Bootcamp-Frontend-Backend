@@ -1,5 +1,4 @@
-let usersModel = require('../models/usersModels');
-let User = require('../models/testSequelize');
+let User = require('../models/usersSeq');
 let Email = require('../config/emailConfig');
 let bcrypt = require('bcrypt-nodejs');
 
@@ -17,34 +16,35 @@ userController.getLogin = function (req, res, next) {
 
 userController.login = function (req, res){
     let user = {
-        usuario_login: req.body.usuario,
-        password_login: req.body.password
+        usuario: req.body.usuario,
+        password: req.body.password
     };
-    usersModel.login(user, function (err, data, options) {
-        if (err) return res.status(500).json(err);
-        switch (options) {
-            case 1:
-                res.render('login', {
-                    title: 'Login',
-                    layout: 'template',
-                    errorUsuario: true
-                });
-                break;
-            case 2:
+    User.findOne({where: {usuario: user.usuario}}).then(userData=>{
+        console.log(userData);
+        if (userData === null) {
+            res.render('login', {
+                title: 'Login',
+                layout: 'template',
+                errorUsuario: true
+            });
+        };
+        bcrypt.compare(user.password, userData.dataValues.hash, function(err, comp) {
+            console.log(err);
+            console.log(comp);
+            if (!comp) {
                 res.render('login', {
                     title: 'login',
                     layout: 'template',
                     errorPassword: true
                 });
-                break;
-            case 3:
-
-                req.session.username = data.usuario;
-                req.session.isAdmin = data.isAdmin;
+            } else {
+                req.session.username = userData.dataValues.usuario;
+                req.session.isAdmin = userData.dataValues.isAdmin;
                 res.redirect('/');
-                break;
-        }
-    })
+            }
+        });
+
+    });
 };
 
 userController.getRegistro = function (req, res) {
@@ -65,41 +65,46 @@ userController.registro = function (req, res) {
         hash: hash
     };
     let encodeHash = encodeURIComponent(hash);
-    usersModel.register(user, function (err, data) {
-        if (err) return res.status(500).json(err);
-        switch (data){
-            case 1:
-                res.render('registro', {
+    User.findAll({where: {$or: [{email: {$eq: user.email}}, {usuario: {$eq: user.usuario}}]}})
+        .then(function (userData) {
+        if (userData.length > 1) {
+            return res.render('registro', {
+                title: 'Registro',
+                layout: 'template',
+                errorUsuario:true
+            });
+        }
+        if (userData.length === 1) {
+            if (userData[0].dataValues.usuario === user.usuario) {
+                return res.render('registro', {
                     title: 'Registro',
                     layout: 'template',
                     errorUsuario:true
                 });
-                break;
-            case 2:
+            }
+            if (userData[0].dataValues.email === user.email) {
                 res.render('registro', {
                     title: 'Registro',
                     layout: 'template',
                     errorEmail:true
                 });
-                break;
-            case 3:
-                let message = {
-                    to: req.body.email,
-                    subject: 'Activation email',
-                    html: '<p>Hello, you have to click the link to activate your account.</p><a href="http://localhost:3000/activate-account/'+ encodeHash+'">Activate account</a>'
-                };
-                Email.transporter.sendMail(message, (err, info) => {
-                    if(err){
-                        res.status(500).send(err, message);
-                        return
-                    }
-                    Email.transporter.close();
-                    console.log(info);
-                    res.redirect('/login')
-                });
-                break;
-
+            }
         }
+        User.create(user).then(userCreated => {
+            let message = {
+                to: req.body.email,
+                subject: 'Activation email',
+                html: '<p>Hello, you have to click the link to activate your account.</p><a href="http://localhost:3000/activate-account/'+ encodeHash+'">Activate account</a>'
+            };
+            Email.transporter.sendMail(message, (err, info) => {
+                if(err){
+                    res.status(500).send(err, message);
+                    return
+                }
+                Email.transporter.close();
+                res.redirect('/login')
+            });
+        });
     });
 };
 
@@ -168,3 +173,4 @@ userController.setNewPassword = function (req, res, next) {
 };
 
 module.exports = userController;
+

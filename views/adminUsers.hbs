@@ -1,0 +1,78 @@
+
+<section>
+    <div id="login" class="login-wrapper d-flex align-items-center">
+        <div class="container container-destinos">
+            <div class="row d-flex justify-content-center row-contact">
+                <div class="col-12 admin-destinos">
+                    <div class="contact-message">
+                        <h3 class="text-white"><i class="mb-4 material-icons mi-center text-white">account_circle</i> DESTINOS</h3>
+                    </div>
+                    <div class="table-container mb-4">
+                        <table class="table table-fixed ">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">User</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Admin</th>
+                                <th scope="col">Active</th>
+                                <th scope="col">Created</th>
+                                <th scope="col">Updated</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {{#if users}}
+                                {{#each users}}
+                                    <tr>
+                                        <td>{{id}}</td>
+                                        <td>{{usuario}}</td>
+                                        <td>{{email}}</td>
+                                        <td>{{isAdmin}}</td>
+                                        <td class="text-center">
+                                            <input id="cbActive" class="cbActive active-destinos" type="checkbox" {{#if active}}checked{{/if}}>
+                                        </td>
+                                        <td>{{createdAt}}</td>
+                                        <td>{{updatedAt}}</td>
+                                    </tr>
+                                {{/each}}
+                            {{/if}}
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+
+                            <!-- anterior enlace -->
+                            {{#with paginate}}
+                                {{#if hasPreviousPages}}<!--res.locals.hasPreviousPages-->
+                                    <li class="page-item prev">
+                                        <a class="page-link" href="{{prev_link this}}">Anterior</a>
+                                    </li>
+                                {{/if}}
+                            {{/with}}
+
+                            <!-- del 1 al n -->
+                            {{#each links}}
+                                <li class="page-item {{is_active @index ../currentPage }}"><!-- custom helper -->
+                                    <a class="page-link" href="{{url}}">{{number}}</a>
+                                </li>
+                            {{/each}}
+
+                            <!-- siguiente enlace -->
+                            {{#with paginate}}
+                                {{#has_next_links ../pageCount this}}
+                                    <li class="page-item next">
+                                        <a class="page-link" href="{{next_link ../this}}">Siguiente</a>
+                                    </li>
+                                {{/has_next_links}}
+                            {{/with}}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

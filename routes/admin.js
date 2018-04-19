@@ -1,7 +1,8 @@
 let express = require('express');
 let router = express.Router();
 let winston = require('../config/winston');
-let destinationsModel = require('../models/destinationsModels');
+let destinationsModel = require('../old&notes/oldfiles/destinationsModels');
+let homeController = require('../controllers/homeController')
 let checkAccessUser = require('../middelwares/sessionSegurity');
 
 // let Multer = require('multer');
@@ -20,20 +21,11 @@ let checkAccessUser = require('../middelwares/sessionSegurity');
 let upload = require('../config/multer');
 
 router.get('/', checkAccessUser, function(req, res, next) {
-    destinationsModel.getDestinos(function (err, destinos) {
-        if (err) return res.status(500).json(err);
-        if (req.session.isAdmin) {
-            res.render('admin', {
-                title: 'Geekshubs Travell',
-                layout: 'template',
-                isAdmin: req.isAdmin,
-                isUser: req.isUser,
-                destinos
-            })
-        } else {
-            res.redirect('/')
-        }
-    });
+    homeController.paginationDestinos(req, res, next);
+});
+
+router.get('/users', checkAccessUser, function(req, res, next) {
+    homeController.paginationUsers(req, res, next);
 });
 
 router.get('/delete/:id', function(req, res, next) {
@@ -72,7 +64,6 @@ router.post('/edit', function(req, res, next) {
 });
 
 router.post('/add', upload.single('image'), function(req, res, next) {
-    console.log(req.file);
     let urlImage = req.file.path.replace(/\\/g, "/");
     let destination = {
         city: req.body.city,

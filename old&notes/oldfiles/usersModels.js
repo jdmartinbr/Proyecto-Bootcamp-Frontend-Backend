@@ -1,4 +1,4 @@
-let connection = require('../connection/mysqlconnection');
+let connection = require('../../connection/mysqlconnection');
 let users = {};
 let bcrypt = require('bcrypt-nodejs');
 
@@ -44,6 +44,23 @@ users.login = function (user, cb) {
           });
       }
   });
+};
+
+users.paginateUsers = function (offset, limit, cb) {
+    if(!connection) return cb('No se ha podido crear la conexion');
+    connection.query('SELECT * FROM users LIMIT ?, ?', [offset, limit], function (err, result) {
+        if (err) {
+            return cb(err);
+        } else {
+            connection.query('SELECT COUNT(*) as total FROM users', function (err, count) {
+                if(err) {
+                    return cb(err)
+                } else {
+                    return cb(null, {count, result})
+                }
+            })
+        }
+    });
 };
 
 module.exports = users;

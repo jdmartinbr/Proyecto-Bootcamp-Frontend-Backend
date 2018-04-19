@@ -1,4 +1,4 @@
-let connection = require('../connection/mysqlconnection');
+let connection = require('../../connection/mysqlconnection');
 let destinations = {};
 
 destinations.getDestinos = function (cb) {
@@ -46,6 +46,23 @@ destinations.addDestination = function (destination, cb) {
     connection.query('INSERT INTO destinos SET ?', destination, function (err, result) {
         if (err) return cb(err);
         return cb(null, true)
+    });
+};
+
+destinations.paginateDestinos = function (offset, limit, cb) {
+    if(!connection) return cb('No se ha podido crear la conexion');
+    connection.query('SELECT * FROM destinos LIMIT ?, ?', [offset, limit], function (err, result) {
+       if (err) {
+           return cb(err);
+       } else {
+           connection.query('SELECT COUNT(*) as total FROM destinos', function (err, count) {
+               if(err) {
+                   return cb(err)
+               } else {
+                   return cb(null, {count, result})
+               }
+           })
+       }
     });
 };
 

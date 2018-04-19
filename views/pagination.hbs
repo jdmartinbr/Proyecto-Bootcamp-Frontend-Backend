@@ -1,0 +1,54 @@
+<div>
+
+{{#each destinos}}
+    {{#if active}}
+        <div class="destinos-item is-showing">
+            <div style="background-image: url({{image}})" class="destino destino-cartagena d-flex justify-content-between">
+                <div class="price d-flex align-items-center justify-content-center align-self-end">{{price}} &euro;</div>
+                <a class="back-heart" >
+                    <i class="heartt material-icons  material-heart2">favorite</i>
+                </a>
+            </div>
+            <div class="descripcion-destino">
+                <p class="type-travell">
+                    <i class="material-icons type">location_on</i>
+                    {{type}}
+                </p>
+                <h1>{{city}}, {{country}}</h1>
+                <p>{{description}}</p>
+            </div>
+        </div>
+    {{/if}}
+{{/each}}
+</div>
+
+<nav aria-label="Page navigation example">
+<ul class="pagination">
+
+<!-- anterior enlace -->
+        {{#with paginate}}
+        {{#if hasPreviousPages}}<!--res.locals.hasPreviousPages-->
+<li class="page-item prev">
+<a class="page-link" href="{{prev_link this}}">Anterior</a>
+</li>
+        {{/if}}
+        {{/with}}
+
+<!-- del 1 al n -->
+        {{#each links}}
+<li class="page-item {{is_active @index ../currentPage }}"><!-- custom helper -->
+<a class="page-link" href="{{url}}">{{number}}</a>
+</li>
+        {{/each}}
+
+<!-- siguiente enlace -->
+        {{#with paginate}}
+        {{#has_next_links ../pageCount this}}
+<li class="page-item next">
+<a class="page-link" href="{{next_link ../this}}">Siguiente</a>
+</li>
+        {{/has_next_links}}
+        {{/with}}
+</ul>
+</nav>
+
